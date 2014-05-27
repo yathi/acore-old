@@ -20,15 +20,27 @@ class npc(object):
 		self.A = [] #The actions
 		self.T = [] #The threatened resources
 		self.P = [] #The possessed resources
-		self.D = [] #The desired resources
+		self.D = [] #The desired resources. Not sure if we need a seperate desired resources list. 
 		self.V = [] #The ordered list of valued resources. 
 		self.sayHello()
 	#TestMethod
 	def sayHello(self):
 		print "\n" , self.name, "welcomes you!"
+	#Define the important resources
+	def defineImportantResource(self, resourceList):
+		self.V.append(resourceList)
+
+	#Method to calculate the rank
+	def rank(self, resource):
+		return len(self.V) - self.V.index(resource)
+
 
 class human(npc):
 	"""docstring for human"""
 	def __init__(self, name):
-		super(human, self).__init__(name)		
+		super(human, self).__init__(name)	
+
+
+
+
 
