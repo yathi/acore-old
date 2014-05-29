@@ -12,33 +12,12 @@ May 27th: Created the file fresh seperate from Mirage. ACORE is going to be my r
 
 """
 
-class npc(object):
-	"""docstring for npc"""
-	def __init__(self, name):
-		super(npc, self).__init__()
-		self.name = name
-		self.A = [] #The actions
-		self.T = [] #The threatened resources
-		self.P = [] #The possessed resources
-		self.D = [] #The desired resources. Not sure if we need a seperate desired resources list. 
-		self.V = [] #The ordered list of valued resources. 
-		self.sayHello()
-	#TestMethod
-	def sayHello(self):
-		print "\n" , self.name, "welcomes you!"
-	#Define the important resources
-	def defineImportantResource(self, resourceList):
-		self.V.append(resourceList)
+from emotion import *
+from npc import human
 
-	#Method to calculate the rank
-	def rank(self, resource):
-		return len(self.V) - self.V.index(resource)
+meera = human('Meera')
 
-
-class human(npc):
-	"""docstring for human"""
-	def __init__(self, name):
-		super(human, self).__init__(name)	
+print calculateThreat(meera)	#We have to add the resources to the treatened resource and give it a ranking for it to calculate the threat
 
 
 
