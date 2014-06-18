@@ -17,16 +17,21 @@ class NPC(object):
 		self.name = name
 		self.A = [] #The actions
 		self.T = [] #The threatened resources
-		self.P = [] #The possessed resources
+		self.P = ["health"] #The possessed resources
 		self.D = [] #The desired resources. Not sure if we need a seperate desired resources list. 
-		self.V = [] #The ordered list of valued resources. 
+		self.V = ["health"] #The ordered list of valued resources. 
 		self.sayHello()
 	#TestMethod
 	def sayHello(self):
 		print "\n" , self.name, "welcomes you!"
+
 	#Define the important resources
-	def defineImportantResource(self, resourceList):
+	def defineImportantResource(self, resourceList): #eventually have to pass the rank also as the parameter so that the resource can be added in its appropriate place.
 		self.V.append(resourceList)
+
+	#Method to add threatened resource
+	def threatenedResource(self, resource):
+		self.T.append(resource)
 
 	#Method to calculate the rank
 	def rank(self, resource):
