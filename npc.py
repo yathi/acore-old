@@ -26,7 +26,7 @@ class NPC(object):
 		print "\n" , self.name, "welcomes you!"
 
 	#Define the important resources
-	def defineImportantResource(self, resourceList): #eventually have to pass the rank also as the parameter so that the resource can be added in its appropriate place.
+	def defineImpResource(self, resourceList): #eventually have to pass the rank also as the parameter so that the resource can be added in its appropriate place.
 		self.V.append(resourceList)
 
 	#Method to add threatened resource
@@ -36,6 +36,11 @@ class NPC(object):
 	#Method to calculate the rank
 	def rank(self, resource):
 		return len(self.V) - self.V.index(resource)
+
+	#Method to show the imp resources
+	def showImpResource(self):
+		for resource in self.V:
+			print self.name + ": " + resource
 
 
 class human(NPC):

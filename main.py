@@ -15,14 +15,51 @@ May 27th: Created the file fresh seperate from Mirage. ACORE is going to be my r
 from emotion import *
 from npc import human
 import time
+from random import random
 
-meera = human('Meera')
+counter = 0
+line = []
 
-print calculateThreat(meera)	#We have to add the resources to the treatened resource and give it a ranking for it to calculate the threat
+# meera = human('Meera')
+
+# print calculateThreat(meera)	#We have to add the resources to the treatened resource and give it a ranking for it to calculate the threat
+
+
+def makeNPC():
+	global counter
+	name = "Girl" + str(counter)
+	npc = human(name)
+	if random() > 0.5:
+		npc.defineImpResource("rank")
+		npc.defineImpResource("reputation")
+	else:
+		npc.defineImpResource("reputation")
+		npc.defineImpResource("rank")
+	counter += 1
+	return npc
 
 def intervalCounter():
 	print "Testing"
 	time.sleep(3)
 
+def stepCounter():
+	print "\n1. Add a new girl in the line"
+	print "2. See line"
+	print "3. Next Step"
+	response = int(raw_input("What would you like to do?"))
+
+
+	if response == 1:
+		line.append(makeNPC())
+	elif response == 2:
+		print "\n"
+		for girl in line:
+			print girl.name
+	elif response == 3:
+		for girl in line:
+			girl.showImpResource()
+
+
 while True:
-	intervalCounter()
+	# intervalCounter()
+	stepCounter()
