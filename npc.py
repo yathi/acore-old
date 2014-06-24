@@ -20,6 +20,8 @@ class NPC(object):
 		self.P = ["health"] #The possessed resources
 		self.D = [] #The desired resources. Not sure if we need a seperate desired resources list. 
 		self.V = ["health"] #The ordered list of valued resources. 
+		self.emotion = "Neutral"
+		self.desAction = "Wait"
 		self.sayHello()
 	#TestMethod
 	def sayHello(self):
@@ -41,6 +43,12 @@ class NPC(object):
 	def showImpResource(self):
 		for resource in self.V:
 			print self.name + ": " + resource
+
+	def returnEmotion(self):
+		return self.emotion
+
+	def returnAction(self):
+		return self.desAction
 
 
 class human(NPC):

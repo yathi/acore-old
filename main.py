@@ -55,10 +55,13 @@ def stepCounter():
 		print "\n"
 		for girl in line:
 			print girl.name
+			girl.showImpResource()
 	elif response == 3:
 		for girl in line:
-			girl.showImpResource()
-
+			print "\nName: " , girl.name
+			print "Emotion: " , girl.returnEmotion()
+			print "Desired Action: " , girl.returnAction()
+			
 
 while True:
 	# intervalCounter()
