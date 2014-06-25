@@ -32,6 +32,62 @@ class NPC(object):
 		print "\n" , self.name, "welcomes you!"
 
 	def returnEmotion(self):
+		if self.nextAction == "Pass":
+			#For Reputation
+			Joy = 0
+			Hope = 0
+			Fear = 0
+			Sorrow = 0
+			expectation_repu = 0.95
+			expectation_proxi = 0.95
+			desire_repu = (0.5 - self.resourceVector[1])*self.resourceWeights[1]
+			desire_proxi = (0.3)*self.resourceWeights[2]
+
+			if (desire_repu > 0) and (expectation_repu == 1):   #These for loops have to be rewritten properly to make them resource independent
+				Joy += desire_repu								#For that reed to define a proper nextResource vector for each action and state
+			elif (desire_repu > 0) and (expectation_repu < 1):
+				Hope += desire_repu * expectation_repu
+			elif (desire_repu < 0) and (expectation_repu == 1):
+				Fear += desire_repu
+			elif (desire_repu < 0) and (expectation_repu < 1):
+				Sorrow += desire_repu * expectation_repu
+
+			if (desire_proxi > 0) and (expectation_repu == 1):
+				Joy += desire_proxi
+			elif (desire_proxi > 0) and (expectation_repu < 1):
+				Hope += desire_proxi * expectation_repu
+			elif (desire_proxi < 0) and (expectation_repu == 1):
+				Fear += desire_proxi
+			elif (desire_proxi < 0) and (expectation_repu < 1):
+				Sorrow += desire_proxi * expectation_repu
+
+			Emotion_P = "Joy: " , Joy, " Hope: " , Hope, " Fear: " , Fear , " Sorrow: " , Sorrow
+
+			self.emotion = Emotion_P
+
+		elif self.nextAction == "Wait" and self.beingPassed:
+			Joy = 0
+			Hope = 0
+			Fear = 0
+			Sorrow = 0
+			expectation_repu = 0.95
+			expectation_proxi = 0.95
+			desire_proxi = (-0.3)*self.resourceWeights[2]
+
+			if (desire_proxi > 0) and (expectation_repu == 1):
+				Joy += desire_proxi
+			elif (desire_proxi > 0) and (expectation_repu < 1):
+				Hope += desire_proxi * expectation_repu
+			elif (desire_proxi < 0) and (expectation_repu == 1):
+				Fear += desire_proxi
+			elif (desire_proxi < 0) and (expectation_repu < 1):
+				Sorrow += desire_proxi * expectation_repu
+
+			Emotion_P = "Joy: " , Joy, " Hope: " , Hope, " Fear: " , Fear , " Sorrow: " , Sorrow
+
+			self.emotion = Emotion_P
+
+
 		return self.emotion
 
 	def passCost(self):
@@ -41,13 +97,22 @@ class NPC(object):
 
 	def waitCost(self):
 		if self.beingPassed:
-			return 0.3*self.resourceWeights[2]
+			return (-0.3)*self.resourceWeights[2]
 		else:
 			return 0
 
+	def protestCost(self):
+		return ((1-self.resourceVector[0])*self.resourceWeights[0] + 
+			(0.85 - self.resourceVector[1])*self.resourceWeights[1])
+
 	def bestAction(self):
-		if self.passCost() > self.waitCost():
-			self.nextAction = "Pass"
+		if self.beingPassed:
+			if self.protestCost() > self.waitCost():
+				self.nextAction = "Protest"
+		else:
+			if self.passCost() > self.waitCost():
+				self.nextAction = "Pass"
+		return self.nextAction
 
 
 class human(NPC):

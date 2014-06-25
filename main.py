@@ -51,13 +51,25 @@ def stepCounter():
 		for indx, girl in enumerate(line):
 			print "\nName: " , girl.name, " " , str(indx)
 			print "Emotion: " , girl.returnEmotion()
-			print "Desired Action: " , girl.nextAction
+			print "Desired Action: " , girl.bestAction()
+			print "Protest Cost: " , girl.protestCost()
+			print "Wait Cost: " , girl.waitCost()
+			print "Pass Cost: " , girl.passCost()
 			print "Resources: " , girl.resourceVector
 	elif response == 3:
 		stateOfNPCCounter += 1
-		if (stateOfNPCCounter%4)==1:
-			for girl in line:
-				girl.bestAction()
+		if (stateOfNPCCounter%1)==0:
+			for indx, girl in enumerate(line):
+				print "\nName: " , girl.name, " " , str(indx)
+				print "Emotion: " , girl.returnEmotion()
+				print "Desired Action: " , girl.bestAction()
+				print "Protest Cost: " , girl.protestCost()
+				print "Wait Cost: " , girl.waitCost()
+				print "Pass Cost: " , girl.passCost()
+				print "Resources: " , girl.resourceVector
+				if girl.bestAction() == "Pass":
+					line[indx-1].beingPassed = True
+				
 
 			
 
