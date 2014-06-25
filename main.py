@@ -29,12 +29,7 @@ def makeNPC():
 	global counter
 	name = "Girl" + str(counter)
 	npc = human(name)
-	if random() > 0.5:
-		npc.defineImpResource("rank")
-		npc.defineImpResource("reputation")
-	else:
-		npc.defineImpResource("reputation")
-		npc.defineImpResource("rank")
+	npc.resourceVector[2] += counter*0.3
 	counter += 1
 	return npc
 
@@ -43,6 +38,7 @@ def intervalCounter():
 	time.sleep(3)
 
 def stepCounter():
+	stateOfNPCCounter = 0
 	print "\n1. Add a new girl in the line"
 	print "2. See line"
 	print "3. Next Step"
@@ -52,15 +48,17 @@ def stepCounter():
 	if response == 1:
 		line.append(makeNPC())
 	elif response == 2:
-		print "\n"
-		for girl in line:
-			print girl.name
-			girl.showImpResource()
-	elif response == 3:
-		for girl in line:
-			print "\nName: " , girl.name
+		for indx, girl in enumerate(line):
+			print "\nName: " , girl.name, " " , str(indx)
 			print "Emotion: " , girl.returnEmotion()
-			print "Desired Action: " , girl.returnAction()
+			print "Desired Action: " , girl.nextAction
+			print "Resources: " , girl.resourceVector
+	elif response == 3:
+		stateOfNPCCounter += 1
+		if (stateOfNPCCounter%4)==1:
+			for girl in line:
+				girl.bestAction()
+
 			
 
 while True:

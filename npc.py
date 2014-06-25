@@ -8,6 +8,7 @@ Description:
 
 Changelog:
 May 27th: Created the file.
+June 23rd: Changed the resource sturcture to the vector model.
 """
 
 from random import random
@@ -20,10 +21,11 @@ class NPC(object):
 		self.name = name
 		self.A = [] #The actions
 		self.resourceName = ["Health", "Reputation", "Proximity"]
-		self.resourceVector = [1, 1, 1]
+		self.resourceVector = [1, 1, 0.3]
 		self.resourceWeights = [random(), random(), random()]
+		self.beingPassed = False
 		self.emotion = "Neutral"
-		self.desAction = "Wait"
+		self.nextAction = "Wait"
 		self.sayHello()
 	#TestMethod
 	def sayHello(self):
@@ -32,8 +34,20 @@ class NPC(object):
 	def returnEmotion(self):
 		return self.emotion
 
-	def returnAction(self):
-		return self.desAction
+	def passCost(self):
+		return ((1-self.resourceVector[0])*self.resourceWeights[0] + 
+			(0.5 - self.resourceVector[1])*self.resourceWeights[1] + 
+			(0.3)*self.resourceWeights[2])
+
+	def waitCost(self):
+		if self.beingPassed:
+			return 0.3*self.resourceWeights[2]
+		else:
+			return 0
+
+	def bestAction(self):
+		if self.passCost() > self.waitCost():
+			self.nextAction = "Pass"
 
 
 class human(NPC):
