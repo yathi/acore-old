@@ -37,14 +37,15 @@ def makeNPC():
 	return npc
 
 def displayLine():
-	for girl in line:
-		print "\nName: " , girl.name
-		print "Emotion: " , girl.emotion
-		print "Desired Action: " , girl.bestAction()
-		print "Protest Cost: " , girl.protestCost()
-		print "Wait Cost: " , girl.waitCost()
-		print "Pass Cost: " , girl.passCost()
-		#print "Resources: " , girl.resourceVector
+	for person in line:
+		print "\nName: " , person.name
+		print "Emotion: " , person.emotion
+		print "Desired Action: " , person.bestAction()
+		print "Protest Cost: " , person.protestCost()
+		print "Wait Cost: " , person.waitCost()
+		print "Pass Cost: " , person.passCost()
+		print "Resources: " , person.resourceVector
+		print "New Resources: " , person.newResourceVector
 
 def intervalCounter():
 	print "Testing"
@@ -52,7 +53,7 @@ def intervalCounter():
 
 def stepCounter():
 	global stateOfNPCCounter
-	print "\n1. Add a new girl in the line"
+	print "\n1. Add a new person in the line"
 	print "2. See line"
 	print "3. Next Step"
 	response = int(raw_input("What would you like to do?"))
@@ -61,35 +62,36 @@ def stepCounter():
 	if response == 1:
 		line.append(makeNPC())
 	elif response == 2:
-		for indx, girl in enumerate(line):
-			print "\nName: " , girl.name, " " , str(indx)
-			print "Emotion: " , girl.returnEmotion()
-			print "Desired Action: " , girl.bestAction()
-			print "Protest Cost: " , girl.protestCost()
-			print "Wait Cost: " , girl.waitCost()
-			print "Pass Cost: " , girl.passCost()
-			#print "Resources: " , girl.resourceVector
+		for indx, person in enumerate(line):
+			print "\nName: " , person.name, " " , str(indx)
+			print "Emotion: " , person.returnEmotion()
+			print "Desired Action: " , person.bestAction()
+			print "Protest Cost: " , person.protestCost()
+			print "Wait Cost: " , person.waitCost()
+			print "Pass Cost: " , person.passCost()
+			#print "Resources: " , person.resourceVector
 	elif response == 3:
 		stateOfNPCCounter += 1
 		#print "\n\nThe counter is :", str(stateOfNPCCounter%3) , "And the counter is " , str(stateOfNPCCounter) ,  "\n"
 		if (stateOfNPCCounter%3)!=0:
-			for indx, girl in enumerate(line):
-				print "\nName: " , girl.name, " " , str(indx)
-				print "Emotion: " , girl.returnEmotion()
-				print "Desired Action: " , girl.bestAction()
-				print "Protest Cost: " , girl.protestCost()
-				print "Wait Cost: " , girl.waitCost()
-				print "Pass Cost: " , girl.passCost()
-				print "Resources: " , girl.resourceVector
-				if girl.bestAction() == "Pass":
+			for indx, person in enumerate(line):
+				print "\nName: " , person.name, " " , str(indx)
+				print "Emotion: " , person.returnEmotion()
+				print "Desired Action: " , person.bestAction()
+				print "Protest Cost: " , person.protestCost()
+				print "Wait Cost: " , person.waitCost()
+				print "Pass Cost: " , person.passCost()
+				print "Resources: " , person.resourceVector
+				print "New Resources: " , person.newResourceVector
+				if person.bestAction() == "Pass":
 					line[indx-1].beingPassed = True
-				if girl.bestAction() == "Protest":
-					print "\nIndex is ", str(indx), "And the len is : ", str(len(line)), "\n"
-					if indx < len(line):
+				if person.bestAction() == "Protest":
+					#print "\nIndex is ", str(indx), "And the len is : ", str(len(line)), "\n"
+					if indx < (len(line)-1):
 						line[indx+1].beingProtested == True
 		elif (stateOfNPCCounter%3)==0:
-			for girl in line:
-				girl.finalAction()
+			for person in line:
+			 person.finalAction()
 			displayLine()
 				
 while True:
