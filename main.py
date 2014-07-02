@@ -15,10 +15,13 @@ May 27th: Created the file fresh seperate from Mirage. ACORE is going to be my r
 from emotion import *
 from npc import human
 import time
-from random import random
+from random import random, randint
 
 counter = 0
 line = []
+stateOfNPCCounter = 0
+nameList = ["Smith", "Johnson", "William", "Mary", "David", "Jennifer", "Chris", "Lisa", "Edward", "Laura", "Sergio", "Sarah", "Emilie", "Matthew", "Kevin", "Liam",
+"Ahmed", "Merriam"]
 
 # meera = human('Meera')
 
@@ -27,18 +30,28 @@ line = []
 
 def makeNPC():
 	global counter
-	name = "Girl" + str(counter)
+	name = nameList[randint(0, (len(nameList))-1)]
 	npc = human(name)
 	npc.resourceVector[2] += counter*0.3
 	counter += 1
 	return npc
+
+def displayLine():
+	for girl in line:
+		print "\nName: " , girl.name
+		print "Emotion: " , girl.emotion
+		print "Desired Action: " , girl.bestAction()
+		print "Protest Cost: " , girl.protestCost()
+		print "Wait Cost: " , girl.waitCost()
+		print "Pass Cost: " , girl.passCost()
+		#print "Resources: " , girl.resourceVector
 
 def intervalCounter():
 	print "Testing"
 	time.sleep(3)
 
 def stepCounter():
-	stateOfNPCCounter = 0
+	global stateOfNPCCounter
 	print "\n1. Add a new girl in the line"
 	print "2. See line"
 	print "3. Next Step"
@@ -55,10 +68,11 @@ def stepCounter():
 			print "Protest Cost: " , girl.protestCost()
 			print "Wait Cost: " , girl.waitCost()
 			print "Pass Cost: " , girl.passCost()
-			print "Resources: " , girl.resourceVector
+			#print "Resources: " , girl.resourceVector
 	elif response == 3:
 		stateOfNPCCounter += 1
-		if (stateOfNPCCounter%1)==0:
+		#print "\n\nThe counter is :", str(stateOfNPCCounter%3) , "And the counter is " , str(stateOfNPCCounter) ,  "\n"
+		if (stateOfNPCCounter%3)!=0:
 			for indx, girl in enumerate(line):
 				print "\nName: " , girl.name, " " , str(indx)
 				print "Emotion: " , girl.returnEmotion()
@@ -69,10 +83,16 @@ def stepCounter():
 				print "Resources: " , girl.resourceVector
 				if girl.bestAction() == "Pass":
 					line[indx-1].beingPassed = True
+				if girl.bestAction() == "Protest":
+					print "\nIndex is ", str(indx), "And the len is : ", str(len(line)), "\n"
+					if indx < len(line):
+						line[indx+1].beingProtested == True
+		elif (stateOfNPCCounter%3)==0:
+			for girl in line:
+				girl.finalAction()
+			displayLine()
 				
-
-			
-
 while True:
 	# intervalCounter()
 	stepCounter()
+
