@@ -21,7 +21,7 @@ counter = 0
 line = []
 stateOfNPCCounter = 0
 nameList = ["Smith", "Johnson", "William", "Mary", "David", "Jennifer", "Chris", "Lisa", "Edward", "Laura", "Sergio", "Sarah", "Emilie", "Matthew", "Kevin", "Liam",
-"Ahmed", "Merriam"]
+"Ahmed", "Merriam", "Thorey", "Igor", "Renato"]
 
 # meera = human('Meera')
 
