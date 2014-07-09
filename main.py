@@ -20,7 +20,8 @@ from random import random, randint
 counter = 0
 line = []
 stateOfNPCCounter = 0
-nameList = ["Smith", "Johnson", "William", "Mary", "David", "Jennifer", "Chris", "Lisa", "Edward", "Laura", "Sergio", "Sarah", "Emilie", "Matthew", "Kevin", "Liam",
+nameList = ["Smith", "Johnson", "William", "Mary", "David", 
+"Jennifer", "Chris", "Lisa", "Edward", "Laura", "Sergio", "Sarah", "Emilie", "Matthew", "Kevin", "Liam",
 "Ahmed", "Merriam"]
 
 # meera = human('Meera')
@@ -30,7 +31,7 @@ nameList = ["Smith", "Johnson", "William", "Mary", "David", "Jennifer", "Chris",
 
 def makeNPC():
 	global counter
-	name = nameList[randint(0, (len(nameList))-1)]
+	name = nameList.pop(randint(0, (len(nameList))-1))
 	npc = human(name)
 	npc.resourceVector[2] += counter*0.3
 	counter += 1
