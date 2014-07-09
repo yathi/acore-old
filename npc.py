@@ -26,7 +26,8 @@ class NPC(object):
 		self.resourceWeights = [random(), random(), random()]
 		self.beingPassed = False
 		self.beingProtested = False
-		self.emotion = "Joy: 0 Hope: 0 Fear: 0 Sorrow: 0"
+		self.emoName = ["Joy", "Hope", "Fear", "Sorrow"]
+		self.emotion = [0, 0, 0, 0]
 		self.nextAction = "Wait"
 		self.sayHello()
 	#TestMethod
