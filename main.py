@@ -4,11 +4,11 @@ Author: Yathi
 
 Description:
 	The main file to run ACORE. The code runs only in python2x for now because pygraphviz is not supported in python 3
-	Keep running emote and cope till resource in not threatened. 
+	Keep running emote and cope till resource in not threatened.
 
 
 Changelog:
-May 27th: Created the file fresh seperate from Mirage. ACORE is going to be my research project and Mirage will be my main project. 
+May 27th: Created the file fresh seperate from Mirage. ACORE is going to be my research project and Mirage will be my main project.
 
 """
 
@@ -20,8 +20,9 @@ from random import random, randint
 counter = 0
 line = []
 stateOfNPCCounter = 0
-nameList = ["Smith", "Johnson", "William", "Mary", "David", "Jennifer", "Chris", "Lisa", "Edward", "Laura", "Sergio", "Sarah", "Emilie", "Matthew", "Kevin", "Liam",
-"Ahmed", "Merriam", "Thorey", "Igor", "Renato"]
+nameList = ["Smith", "Johnson", "William", "Mary", "David",
+"Jennifer", "Chris", "Lisa", "Edward", "Laura", "Sergio", "Sarah", "Emilie", "Matthew", "Kevin", "Liam",
+"Ahmed", "Merriam"]
 
 # meera = human('Meera')
 
@@ -98,7 +99,7 @@ def stepCounter():
 			for person in line:
 			 person.finalAction()
 			displayLine()
-				
+
 while True:
 	# intervalCounter()
 	stepCounter()
