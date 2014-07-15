@@ -26,21 +26,28 @@ nameList = ["Smith", "Johnson", "William", "Mary", "David", "Jennifer", "Chris",
 # meera = human('Meera')
 
 # print calculateThreat(meera)	#We have to add the resources to the treatened resource and give it a ranking for it to calculate the threat
-
+initialized = False
 
 def makeNPC():
-	global counter
-	name = nameList[randint(0, (len(nameList))-1)]
-	npc = human(name)
-	npc.resourceVector[2] += counter*0.3
-	counter += 1
-	return npc
+    global counter
+    name = nameList.pop(randint(0, (len(nameList))-1))
+    npc = human(name)
+    npc.resourceVector[2] += counter*0.3
+    counter += 1
+    return npc
+
+def initialize(numInLine):
+    global line
+    count = 0
+    for count in range(numInLine):
+        line.append(makeNPC())
+        count += 1
 
 def displayLine():
 	for person in line:
 		print "\nName: " , person.name
 		print "Emotion: " , [round(emo,2) for emo in person.emotion]
-		print "Desired Action: " , person.bestAction()
+		print "Desired Action: " , person.nextAction
 		print "Protest Cost: " , round(person.protestCost(), 2)
 		print "Wait Cost: " , round(person.waitCost(), 2)
 		print "Pass Cost: " , round(person.passCost(), 2)
@@ -48,20 +55,16 @@ def displayLine():
 		print "Weight Vector" , [round(Weight, 2) for Weight in person.resourceWeights]
 		print "New Resources: " , person.newResourceVector
 
-def intervalCounter():
-	print "Testing"
-	time.sleep(3)
-
 def stepCounter():
 	global stateOfNPCCounter
-	print "\n1. Add a new person in the line"
+	print "\n1. Initialize"
 	print "2. See line"
 	print "3. Next Step"
 	response = int(raw_input("What would you like to do?"))
 
 
 	if response == 1:
-		line.append(makeNPC())
+		initialize(6	)
 	elif response == 2:
 		for indx, person in enumerate(line):
 			print "\nName: " , person.name, " " , str(indx)
@@ -78,16 +81,16 @@ def stepCounter():
 			for indx, person in enumerate(line):
 				print "\nName: " , person.name
 				print "Emotion: " , [round(emo,2) for emo in person.emotion]
-				print "Desired Action: " , person.bestAction()
-				print "Protest Cost: " , round(person.protestCost(), 2)
-				print "Wait Cost: " , round(person.waitCost(), 2)
-				print "Pass Cost: " , round(person.passCost(), 2)
+				print "Desired Action: " , person.bestAction(indx)
+				#print "Protest Cost: " , round(person.protestCost(), 2)
+				#print "Wait Cost: " , round(person.waitCost(), 2)
+				#print "Pass Cost: " , round(person.passCost(), 2)
 				print "Resources: " , person.resourceVector
 				print "Weight Vector" , [round(Weight, 2) for Weight in person.resourceWeights]
-				print "New Resources: " , person.newResourceVector
-				if person.bestAction() == "Pass":
+				#print "New Resources: " , person.newResourceVector
+				if person.nextAction == "Pass":
 					line[indx-1].beingPassed = True
-				if person.bestAction() == "Protest":
+				if person.nextAction == "Protest":
 					#print "\nIndex is ", str(indx), "And the len is : ", str(len(line)), "\n"
 					if indx < (len(line)-1):
 						line[indx+1].beingProtested == True

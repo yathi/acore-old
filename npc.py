@@ -21,13 +21,13 @@ class NPC(object):
 		self.name = name
 		self.A = [] #The actions
 		self.resourceName = ["Health", "Reputation", "Proximity"]
-		self.resourceVector = [1, 1, 0.3]
+		self.resourceVector = [1.0, 1.0, 0.3]
 		self.newResourceVector = []
 		self.resourceWeights = [random(), random(), random()]
 		self.beingPassed = False
 		self.beingProtested = False
 		self.emoName = ["Joy", "Hope", "Fear", "Sorrow"]
-		self.emotion = [0, 0, 0, 0]
+		self.emotion = [0.0, 0.0, 0.0, 0.0]
 		self.nextAction = "Wait"
 		self.sayHello()
 	#TestMethod
@@ -324,13 +324,14 @@ class NPC(object):
 		return ((1-self.resourceVector[0])*self.resourceWeights[0] + 
 			(0.85 - self.resourceVector[1])*self.resourceWeights[1])
 
-	def bestAction(self):
+	def bestAction(self, position):
 		if self.beingPassed:
 			if self.protestCost() > self.waitCost():
 				self.nextAction = "Protest"
 		else:
 			if self.passCost() > self.waitCost():
-				self.nextAction = "Pass"
+				if position != 0:  #To Ensure that the first person does not want to pass. 
+					self.nextAction = "Pass"
 		return self.nextAction
 
 
