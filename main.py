@@ -56,72 +56,71 @@ def displayLine():
 		#print "New Resources: " , person.newResourceVector
 
 def stepCounter():
-	global stateOfNPCCounter, gameStatus
-	print "\n1. Initialize"
-	print "2. See line"
-	print "3. Next Step"
-	response = int(raw_input("What would you like to do?\n:"))
+	global stateOfNPCCounter, gameStatus, initialized
+	raw_input("\nNext Step?\n:")
 
 
-	if response == 1:
-		initialize(numInLine = 6)  #The parameter tells the number of elements
-
-	elif response == 2:
-		displayLine()
-
-	elif response == 3:
+	if initialized:
 		if len(line) == 0:
 			gameStatus = 'Over'
 			print '\n ----------Game Over!------------ \n'
+	else:
+		initialize(numInLine = 6)  #The parameter tells the number of elements
+		initialized = True
 
-		if gameStatus == 'initial':
-			print 'The game status is ' , gameStatus
-			for indx, person in enumerate(line):
-				person.decidePass(indx)
-			displayLine()
-			gameStatus = 'protest?'
+	if gameStatus == 'initial':
+		print 'The game status is ' , gameStatus
+		for indx, person in enumerate(line):
+			person.decidePass(indx)
+		displayLine()
+		gameStatus = 'protest?'
 
-		elif gameStatus == 'protest?':
-			print 'The game status is ' , gameStatus
-			for indx, person in enumerate(line):
-				if indx < (len(line)-1):
-					person.decideProtest(beingPassed = (line[indx+1].nextAction == "Pass"))
+	elif gameStatus == 'protest?':
+		print 'The game status is ' , gameStatus
+		for indx, person in enumerate(line):
+			if indx < (len(line)-1):
+				person.decideProtest(beingPassed = (line[indx+1].nextAction == "Pass"))
 
-			for indx, person in enumerate(line):
-				if indx < (len(line)-1):
-					person.sanityCheck(indx, notbeingPassed = (line[indx+1].nextAction != 'Pass'))
-			displayLine()
-			gameStatus = 'penultimate'
+		for indx, person in enumerate(line):
+			if indx < (len(line)-1):
+				person.sanityCheck(indx, notbeingPassed = (line[indx+1].nextAction != 'Pass'))
+		displayLine()
+		gameStatus = 'penultimate'
 
-		elif gameStatus == 'penultimate':
-			print 'The game status is ' , gameStatus
-			for indx, person in enumerate(line):
-				if indx != 0:
-					if person.nextAction == 'Pass' and line[indx-1] == 'Protest':
-						if random() < 0.50:
-							person.nextAction = 'Pass_Success'
-							line[indx], line[indx-1] = line[indx-1], line[indx] #Code to swap the 2 positions
-						else:
-							person.nextAction = 'Pass_Fail'
-					elif person.nextAction == 'Pass' and line[indx-1] == 'Wait':
-						if random() < 0.95:
-							person.nextAction = 'Pass_Success'
-							line[indx], line[indx-1] = line[indx-1], line[indx] #Code to swap the 2 positions
-						else:
-							person.nextAction = 'Pass_Fail'
+	elif gameStatus == 'penultimate':
+		print 'The game status is ' , gameStatus
+		for indx, person in enumerate(line):
+			if indx != 0:
+				print person.name
+				if person.nextAction == 'Pass' and line[indx-1].nextAction == 'Protest':
+					if random() < 0.50:
+						print 'Being protested'
+						person.nextAction = 'Pass_Success'
+						line[indx-1].nextAction = 'Wait'
+						line[indx], line[indx-1] = line[indx-1], line[indx] #Code to swap the 2 positions
+					else:
+						person.nextAction = 'Pass_Fail'
+				elif person.nextAction == 'Pass' and line[indx-1].nextAction == 'Wait':
+					if random() < 0.95:
+						print 'Not being protested'
+						person.nextAction = 'Pass_Success'
+						line[indx-1].nextAction = 'Wait'
+						line[indx], line[indx-1] = line[indx-1], line[indx] #Code to swap the 2 positions
+					else:
+						person.nextAction = 'Pass_Fail'
 
-			displayLine()
-			gameStatus = 'final'
+		displayLine()
+		gameStatus = 'final'
 
-		elif gameStatus == 'final':
-			print '\nThe game status is ' , gameStatus
-			print str(line[0].name) , 'gets the Occulus Rift'
-			line.pop(0)
-			for person in line:
-				person.nextAction = 'Wait'
+	elif gameStatus == 'final':
+		print '\nThe game status is ' , gameStatus
+		print str(line[0].name) , 'gets the Occulus Rift'
+		line.pop(0)
+		for person in line:
+			person.nextAction = 'Wait'
 
-			displayLine()
-			gameStatus = 'initial'
+		displayLine()
+		gameStatus = 'initial'
 
 while gameStatus != 'Over':
 	stepCounter()
