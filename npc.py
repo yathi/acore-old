@@ -44,29 +44,19 @@ class NPC(object):
 			expectation_repu = 0.95
 			expectation_proxi = 0.95
 			self.newResourceVector = [1, 0.5, self.resourceVector[2]+0.3]
-			desire_repu = (self.newResourceVector[1] - self.resourceVector[1])*self.resourceWeights[1]
-			desire_proxi = (self.newResourceVector[2]-self.resourceVector[2])*self.resourceWeights[2]
 
-			if (desire_repu > 0) and (expectation_repu == 1):   #These for loops have to be rewritten properly to make them resource independent
-				Joy += desire_repu								#For that reed to define a proper nextResource vector for each action and state
-			elif (desire_repu > 0) and (expectation_repu < 1):
-				Hope += desire_repu * expectation_repu
-			elif (desire_repu < 0) and (expectation_repu == 1):
-				Fear += desire_repu
-			elif (desire_repu < 0) and (expectation_repu < 1):
-				Sorrow += desire_repu * expectation_repu
+			for indx, resource in enumerate(self.resourceVector):
+				desire = (self.newResourceVector[indx] - resource)*self.resourceWeights[indx]
+				if (desire > 0) and (expectation_repu == 1):
+					Joy += desire
+				elif (desire > 0) and (expectation_repu < 1):
+					Hope += desire * expectation_repu
+				elif (desire < 0) and (expectation_repu == 1):
+					Fear += desire
+				elif (desire < 0) and (expectation_repu < 1):
+					Sorrow += desire * expectation_repu
 
-			if (desire_proxi > 0) and (expectation_repu == 1):
-				Joy += desire_proxi
-			elif (desire_proxi > 0) and (expectation_repu < 1):
-				Hope += desire_proxi * expectation_repu
-			elif (desire_proxi < 0) and (expectation_repu == 1):
-				Fear += desire_proxi
-			elif (desire_proxi < 0) and (expectation_repu < 1):
-				Sorrow += desire_proxi * expectation_repu
-
-			Emotion_P = "Joy: " , Joy, " Hope: " , Hope, " Fear: " , Fear , " Sorrow: " , Sorrow
-			self.emotion = Emotion_P
+			self.emotion = [Joy, Hope, Fear, Sorrow]
 
 		elif self.nextAction == "Wait" and self.beingPassed:
 			Joy = 0
@@ -76,18 +66,18 @@ class NPC(object):
 			expectation_repu = 0.95
 			expectation_proxi = 0.95
 			self.newResourceVector = [1, 1, self.resourceVector[2]-0.3]
-			desire_proxi = (self.newResourceVector[2]-self.resourceVector[2])*self.resourceWeights[2]
+			for indx, resource in enumerate(self.resourceVector):
+				desire = (self.newResourceVector[indx] - resource)*self.resourceWeights[indx]
+				if (desire > 0) and (expectation_repu == 1):
+					Joy += desire
+				elif (desire > 0) and (expectation_repu < 1):
+					Hope += desire * expectation_repu
+				elif (desire < 0) and (expectation_repu == 1):
+					Fear += desire
+				elif (desire < 0) and (expectation_repu < 1):
+					Sorrow += desire * expectation_repu
 
-			if (desire_proxi > 0) and (expectation_repu == 1):
-				Joy += desire_proxi
-			elif (desire_proxi > 0) and (expectation_repu < 1):
-				Hope += desire_proxi * expectation_repu
-			elif (desire_proxi < 0) and (expectation_repu == 1):
-				Fear += desire_proxi
-			elif (desire_proxi < 0) and (expectation_repu < 1):
-				Sorrow += desire_proxi * expectation_repu
-			Emotion_P = "Joy: " , Joy, " Hope: " , Hope, " Fear: " , Fear , " Sorrow: " , Sorrow
-			self.emotion = Emotion_P
+			self.emotion = [Joy, Hope, Fear, Sorrow]
 		elif self.nextAction == "Protest":
 			Joy = 0
 			Hope = 0
@@ -97,29 +87,18 @@ class NPC(object):
 			expectation_proxi = 0.95
 			self.newResourceVector = [1, 0.85, self.resourceVector[2]]
 			self.resourceVector[2] = self.resourceVector[2] - 0.3
-			desire_repu = (self.newResourceVector[1] - self.resourceVector[1])*self.resourceWeights[1]
-			desire_proxi = (self.newResourceVector[2]-self.resourceVector[2])*self.resourceWeights[2]
+			for indx, resource in enumerate(self.resourceVector):
+				desire = (self.newResourceVector[indx] - resource)*self.resourceWeights[indx]
+				if (desire > 0) and (expectation_repu == 1):
+					Joy += desire
+				elif (desire > 0) and (expectation_repu < 1):
+					Hope += desire * expectation_repu
+				elif (desire < 0) and (expectation_repu == 1):
+					Fear += desire
+				elif (desire < 0) and (expectation_repu < 1):
+					Sorrow += desire * expectation_repu
 
-			if (desire_repu > 0) and (expectation_repu == 1):   #These for loops have to be rewritten properly to make them resource independent
-				Joy += desire_repu								#For that reed to define a proper nextResource vector for each action and state
-			elif (desire_repu > 0) and (expectation_repu < 1):
-				Hope += desire_repu * expectation_repu
-			elif (desire_repu < 0) and (expectation_repu == 1):
-				Fear += desire_repu
-			elif (desire_repu < 0) and (expectation_repu < 1):
-				Sorrow += desire_repu * expectation_repu
-
-			if (desire_proxi > 0) and (expectation_repu == 1):
-				Joy += desire_proxi
-			elif (desire_proxi > 0) and (expectation_repu < 1):
-				Hope += desire_proxi * expectation_repu
-			elif (desire_proxi < 0) and (expectation_repu == 1):
-				Fear += desire_proxi
-			elif (desire_proxi < 0) and (expectation_repu < 1):
-				Sorrow += desire_proxi * expectation_repu
-
-			Emotion_P = "Joy: " , Joy, " Hope: " , Hope, " Fear: " , Fear , " Sorrow: " , Sorrow
-			self.emotion = Emotion_P
+			self.emotion = [Joy, Hope, Fear, Sorrow]
 
 
 		return self.emotion
@@ -139,26 +118,18 @@ class NPC(object):
 					self.resourceVector[2] = self.resourceVector[2] + 0.3
 					self.resourceVector[1] = 0.85
 
-					if (desire_repu > 0) and (expectation_repu == 1):   #These for loops have to be rewritten properly to make them resource independent
-						Joy += desire_repu								#For that reed to define a proper nextResource vector for each action and state
-					elif (desire_repu > 0) and (expectation_repu < 1):
-						Hope += desire_repu * expectation_repu
-					elif (desire_repu < 0) and (expectation_repu == 1):
-						Fear += desire_repu
-					elif (desire_repu < 0) and (expectation_repu < 1):
-						Sorrow += desire_repu * expectation_repu
+					for indx, resource in enumerate(self.resourceVector):
+						desire = (self.newResourceVector[indx] - resource)*self.resourceWeights[indx]
+						if (desire > 0) and (expectation_repu == 1):
+							Joy += desire
+						elif (desire > 0) and (expectation_repu < 1):
+							Hope += desire * expectation_repu
+						elif (desire < 0) and (expectation_repu == 1):
+							Fear += desire
+						elif (desire < 0) and (expectation_repu < 1):
+							Sorrow += desire * expectation_repu
 
-					if (desire_proxi > 0) and (expectation_repu == 1):
-						Joy += desire_proxi
-					elif (desire_proxi > 0) and (expectation_repu < 1):
-						Hope += desire_proxi * expectation_repu
-					elif (desire_proxi < 0) and (expectation_repu == 1):
-						Fear += desire_proxi
-					elif (desire_proxi < 0) and (expectation_repu < 1):
-						Sorrow += desire_proxi * expectation_repu
-
-					Emotion_P = "Joy: " , Joy, " Hope: " , Hope, " Fear: " , Fear , " Sorrow: " , Sorrow
-					self.emotion = Emotion_P
+					self.emotion = [Joy, Hope, Fear, Sorrow]
 				else:
 					Joy = 0
 					Hope = 0
@@ -170,26 +141,18 @@ class NPC(object):
 					desire_proxi = (0)*self.resourceWeights[2]
 					self.resourceVector[1] = 0.85
 
-					if (desire_repu > 0) and (expectation_repu == 1):   #These for loops have to be rewritten properly to make them resource independent
-						Joy += desire_repu								#For that reed to define a proper nextResource vector for each action and state
-					elif (desire_repu > 0) and (expectation_repu < 1):
-						Hope += desire_repu * expectation_repu
-					elif (desire_repu < 0) and (expectation_repu == 1):
-						Fear += desire_repu
-					elif (desire_repu < 0) and (expectation_repu < 1):
-						Sorrow += desire_repu * expectation_repu
+					for indx, resource in enumerate(self.resourceVector):
+						desire = (self.newResourceVector[indx] - resource)*self.resourceWeights[indx]
+						if (desire > 0) and (expectation_repu == 1):
+							Joy += desire
+						elif (desire > 0) and (expectation_repu < 1):
+							Hope += desire * expectation_repu
+						elif (desire < 0) and (expectation_repu == 1):
+							Fear += desire
+						elif (desire < 0) and (expectation_repu < 1):
+							Sorrow += desire * expectation_repu
 
-					if (desire_proxi > 0) and (expectation_repu == 1):
-						Joy += desire_proxi
-					elif (desire_proxi > 0) and (expectation_repu < 1):
-						Hope += desire_proxi * expectation_repu
-					elif (desire_proxi < 0) and (expectation_repu == 1):
-						Fear += desire_proxi
-					elif (desire_proxi < 0) and (expectation_repu < 1):
-						Sorrow += desire_proxi * expectation_repu
-
-					Emotion_P = "Joy: " , Joy, " Hope: " , Hope, " Fear: " , Fear , " Sorrow: " , Sorrow
-					self.emotion = Emotion_P
+					self.emotion = [Joy, Hope, Fear, Sorrow]
 			else:
 				if random() > 0.9:
 					Joy = 0
@@ -203,26 +166,18 @@ class NPC(object):
 					self.resourceVector[2] = self.resourceVector[2] + 0.3
 					self.resourceVector[1] = 0.85
 
-					if (desire_repu > 0) and (expectation_repu == 1):   #These for loops have to be rewritten properly to make them resource independent
-						Joy += desire_repu								#For that reed to define a proper nextResource vector for each action and state
-					elif (desire_repu > 0) and (expectation_repu < 1):
-						Hope += desire_repu * expectation_repu
-					elif (desire_repu < 0) and (expectation_repu == 1):
-						Fear += desire_repu
-					elif (desire_repu < 0) and (expectation_repu < 1):
-						Sorrow += desire_repu * expectation_repu
+					for indx, resource in enumerate(self.resourceVector):
+						desire = (self.newResourceVector[indx] - resource)*self.resourceWeights[indx]
+						if (desire > 0) and (expectation_repu == 1):
+							Joy += desire
+						elif (desire > 0) and (expectation_repu < 1):
+							Hope += desire * expectation_repu
+						elif (desire < 0) and (expectation_repu == 1):
+							Fear += desire
+						elif (desire < 0) and (expectation_repu < 1):
+							Sorrow += desire * expectation_repu
 
-					if (desire_proxi > 0) and (expectation_repu == 1):
-						Joy += desire_proxi
-					elif (desire_proxi > 0) and (expectation_repu < 1):
-						Hope += desire_proxi * expectation_repu
-					elif (desire_proxi < 0) and (expectation_repu == 1):
-						Fear += desire_proxi
-					elif (desire_proxi < 0) and (expectation_repu < 1):
-						Sorrow += desire_proxi * expectation_repu
-
-					Emotion_P = "Joy: " , Joy, " Hope: " , Hope, " Fear: " , Fear , " Sorrow: " , Sorrow
-					self.emotion = Emotion_P
+					self.emotion = [Joy, Hope, Fear, Sorrow]
 				else:
 					Joy = 0
 					Hope = 0
@@ -234,26 +189,18 @@ class NPC(object):
 					desire_proxi = (0)*self.resourceWeights[2]
 					self.resourceVector[1] = 0.85
 
-					if (desire_repu > 0) and (expectation_repu == 1):   #These for loops have to be rewritten properly to make them resource independent
-						Joy += desire_repu								#For that reed to define a proper nextResource vector for each action and state
-					elif (desire_repu > 0) and (expectation_repu < 1):
-						Hope += desire_repu * expectation_repu
-					elif (desire_repu < 0) and (expectation_repu == 1):
-						Fear += desire_repu
-					elif (desire_repu < 0) and (expectation_repu < 1):
-						Sorrow += desire_repu * expectation_repu
+					for indx, resource in enumerate(self.resourceVector):
+						desire = (self.newResourceVector[indx] - resource)*self.resourceWeights[indx]
+						if (desire > 0) and (expectation_repu == 1):
+							Joy += desire
+						elif (desire > 0) and (expectation_repu < 1):
+							Hope += desire * expectation_repu
+						elif (desire < 0) and (expectation_repu == 1):
+							Fear += desire
+						elif (desire < 0) and (expectation_repu < 1):
+							Sorrow += desire * expectation_repu
 
-					if (desire_proxi > 0) and (expectation_repu == 1):
-						Joy += desire_proxi
-					elif (desire_proxi > 0) and (expectation_repu < 1):
-						Hope += desire_proxi * expectation_repu
-					elif (desire_proxi < 0) and (expectation_repu == 1):
-						Fear += desire_proxi
-					elif (desire_proxi < 0) and (expectation_repu < 1):
-						Sorrow += desire_proxi * expectation_repu
-
-					Emotion_P = "Joy: " , Joy, " Hope: " , Hope, " Fear: " , Fear , " Sorrow: " , Sorrow
-					self.emotion = Emotion_P
+					self.emotion = [Joy, Hope, Fear, Sorrow]
 		elif self.nextAction == "Wait" and self.beingPassed:
 			Joy = 0
 			Hope = 0
@@ -264,16 +211,18 @@ class NPC(object):
 			desire_proxi = (-0.3)*self.resourceWeights[2]
 			self.resourceVector[2] = self.resourceVector[2] - 0.3
 
-			if (desire_proxi > 0) and (expectation_repu == 1):
-				Joy += desire_proxi
-			elif (desire_proxi > 0) and (expectation_repu < 1):
-				Hope += desire_proxi * expectation_repu
-			elif (desire_proxi < 0) and (expectation_repu == 1):
-				Fear += desire_proxi
-			elif (desire_proxi < 0) and (expectation_repu < 1):
-				Sorrow += desire_proxi * expectation_repu
-			Emotion_P = "Joy: " , Joy, " Hope: " , Hope, " Fear: " , Fear , " Sorrow: " , Sorrow
-			self.emotion = Emotion_P
+			for indx, resource in enumerate(self.resourceVector):
+						desire = (self.newResourceVector[indx] - resource)*self.resourceWeights[indx]
+						if (desire > 0) and (expectation_repu == 1):
+							Joy += desire
+						elif (desire > 0) and (expectation_repu < 1):
+							Hope += desire * expectation_repu
+						elif (desire < 0) and (expectation_repu == 1):
+							Fear += desire
+						elif (desire < 0) and (expectation_repu < 1):
+							Sorrow += desire * expectation_repu
+
+					self.emotion = [Joy, Hope, Fear, Sorrow]
 		elif self.nextAction == "Protest":
 			Joy = 0
 			Hope = 0
@@ -284,30 +233,18 @@ class NPC(object):
 			desire_repu = (0.85 - self.resourceVector[1])*self.resourceWeights[1]
 			desire_proxi = (0.3)*self.resourceWeights[2]
 
-			if (desire_repu > 0) and (expectation_repu == 1):   #These for loops have to be rewritten properly to make them resource independent
-				Joy += desire_repu								#For that reed to define a proper nextResource vector for each action and state
-			elif (desire_repu > 0) and (expectation_repu < 1):
-				Hope += desire_repu * expectation_repu
-			elif (desire_repu < 0) and (expectation_repu == 1):
-				Fear += desire_repu
-			elif (desire_repu < 0) and (expectation_repu < 1):
-				Sorrow += desire_repu * expectation_repu
+			for indx, resource in enumerate(self.resourceVector):
+						desire = (self.newResourceVector[indx] - resource)*self.resourceWeights[indx]
+						if (desire > 0) and (expectation_repu == 1):
+							Joy += desire
+						elif (desire > 0) and (expectation_repu < 1):
+							Hope += desire * expectation_repu
+						elif (desire < 0) and (expectation_repu == 1):
+							Fear += desire
+						elif (desire < 0) and (expectation_repu < 1):
+							Sorrow += desire * expectation_repu
 
-			if (desire_proxi > 0) and (expectation_repu == 1):
-				Joy += desire_proxi
-			elif (desire_proxi > 0) and (expectation_repu < 1):
-				Hope += desire_proxi * expectation_repu
-			elif (desire_proxi < 0) and (expectation_repu == 1):
-				Fear += desire_proxi
-			elif (desire_proxi < 0) and (expectation_repu < 1):
-				Sorrow += desire_proxi * expectation_repu
-
-			Emotion_P = "Joy: " , Joy, " Hope: " , Hope, " Fear: " , Fear , " Sorrow: " , Sorrow
-			self.emotion = Emotion_P
-
-
-
-
+					self.emotion = [Joy, Hope, Fear, Sorrow]
 
 	def passCost(self):
 		return ((1-self.resourceVector[0])*self.resourceWeights[0] + 
