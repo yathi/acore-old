@@ -279,7 +279,28 @@ class NPC(object):
 
 	def sanityCheck(self, indx, notbeingPassed):
 		if self.nextAction == "Protest" and notbeingPassed:
-			self.decidePass(indx)
+			if self.passCost() > 0:
+				self.nextAction = 'Pass'
+			else:
+				self.nextAction = 'Wait'
+
+	def computeEmotion(self, expectation):
+		Joy = 0
+		Hope = 0
+		Fear = 0
+		Sorrow = 0
+		for indx, resource in enumerate(self.resourceVector):
+			desire = (self.newResourceVector[indx] - resource)*self.resourceWeights[indx]
+			if (desire > 0) and (expectation == 1):
+				Joy += desire
+			elif (desire > 0) and (expectation < 1):
+					Hope += desire * expectation
+			elif (desire < 0) and (expectation == 1):
+				Fear += desire
+			elif (desire < 0) and (expectation < 1):
+				Sorrow += desire * expectation
+
+		self.emotion = [Joy, Hope, Fear, Sorrow]
 
 
 
