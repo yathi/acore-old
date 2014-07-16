@@ -1,4 +1,4 @@
- """
+"""
 
 Author: Yathi
 
@@ -9,9 +9,7 @@ Description:
 
 Changelog:
 May 27th: Created the file fresh seperate from Mirage. ACORE is going to be my research project and Mirage will be my main project.
-
 """
-
 from emotion import *
 from npc import human
 import time
@@ -28,6 +26,7 @@ nameList = ["Smith", "Johnson", "William", "Mary", "David",
 
 # print calculateThreat(meera)	#We have to add the resources to the treatened resource and give it a ranking for it to calculate the threat
 initialized = False
+gameStatus = 'initial'
 
 def makeNPC():
     global counter
@@ -47,14 +46,14 @@ def initialize(numInLine):
 def displayLine():
 	for person in line:
 		print "\nName: " , person.name
-		print "Emotion: " , [round(emo,2) for emo in person.emotion]
+		#print "Emotion: " , [round(emo,2) for emo in person.emotion]
 		print "Desired Action: " , person.nextAction
-		print "Protest Cost: " , round(person.protestCost(), 2)
-		print "Wait Cost: " , round(person.waitCost(), 2)
-		print "Pass Cost: " , round(person.passCost(), 2)
-		print "Resources: " , person.resourceVector
-		print "Weight Vector" , [round(Weight, 2) for Weight in person.resourceWeights]
-		print "New Resources: " , person.newResourceVector
+		#print "Protest Cost: " , round(person.protestCost(), 2)
+		#print "Wait Cost: " , round(person.waitCost(), 2)
+		#print "Pass Cost: " , round(person.passCost(), 2)
+		#print "Resources: " , person.resourceVector
+		#print "Weight Vector" , [round(Weight, 2) for Weight in person.resourceWeights]
+		#print "New Resources: " , person.newResourceVector
 
 def stepCounter():
 	global stateOfNPCCounter
@@ -65,36 +64,34 @@ def stepCounter():
 
 
 	if response == 1:
-		initialize(6	)
+		initialize(numInLine = 6)  #The parameter tells the number of elements
 	elif response == 2:
 		for indx, person in enumerate(line):
 			print "\nName: " , person.name, " " , str(indx)
 			print "Emotion: " , person.returnEmotion()
-			print "Desired Action: " , person.bestAction()
+			print "Desired Action: " , person.nextAction
 			print "Protest Cost: " , person.protestCost()
 			print "Wait Cost: " , person.waitCost()
 			print "Pass Cost: " , person.passCost()
 			#print "Resources: " , person.resourceVector
 	elif response == 3:
-		stateOfNPCCounter += 1
-		#print "\n\nThe counter is :", str(stateOfNPCCounter%3) , "And the counter is " , str(stateOfNPCCounter) ,  "\n"
-		if (stateOfNPCCounter%3)!=0:
+		if gameStatus == 'initial':
 			for indx, person in enumerate(line):
 				print "\nName: " , person.name
-				print "Emotion: " , [round(emo,2) for emo in person.emotion]
-				print "Desired Action: " , person.bestAction(indx)
+				#print "Emotion: " , [round(emo,2) for emo in person.emotion]
+				print "Desired Action: " , person.decidePass(indx)
 				#print "Protest Cost: " , round(person.protestCost(), 2)
 				#print "Wait Cost: " , round(person.waitCost(), 2)
 				#print "Pass Cost: " , round(person.passCost(), 2)
-				print "Resources: " , person.resourceVector
-				print "Weight Vector" , [round(Weight, 2) for Weight in person.resourceWeights]
+				#print "Resources: " , person.resourceVector
+				#print "Weight Vector" , [round(Weight, 2) for Weight in person.resourceWeights]
 				#print "New Resources: " , person.newResourceVector
-				if person.nextAction == "Pass":
-					line[indx-1].beingPassed = True
-				if person.nextAction == "Protest":
-					#print "\nIndex is ", str(indx), "And the len is : ", str(len(line)), "\n"
-					if indx < (len(line)-1):
-						line[indx+1].beingProtested == True
+				gameStatus = 'protest?'
+		elif gameStatus == 'protest?':
+			for indx, person in enumerate(line):
+				person.decideProtest(beingPassed = (line[indx+1].nextAction == "Pass"))
+
+
 		elif (stateOfNPCCounter%3)==0:
 			for person in line:
 			 person.finalAction()

@@ -24,8 +24,6 @@ class NPC(object):
 		self.resourceVector = [1.0, 1.0, 0.3]
 		self.newResourceVector = []
 		self.resourceWeights = [random(), random(), random()]
-		self.beingPassed = False
-		self.beingProtested = False
 		self.emoName = ["Joy", "Hope", "Fear", "Sorrow"]
 		self.emotion = [0, 0, 0, 0]
 		self.nextAction = "Wait"
@@ -271,24 +269,23 @@ class NPC(object):
 			(0.3)*self.resourceWeights[2])
 
 	def waitCost(self):
-		if self.beingPassed:
-			return (-0.3)*self.resourceWeights[2]
-		else:
-			return 0
-
+		return (-0.3)*self.resourceWeights[2]
+		
 	def protestCost(self):
 		return ((1-self.resourceVector[0])*self.resourceWeights[0] + 
 			(0.85 - self.resourceVector[1])*self.resourceWeights[1])
 
-	def bestAction(self, position):
-		if self.beingPassed:
-			if self.protestCost() > self.waitCost():
-				self.nextAction = "Protest"
-		else:
-			if self.passCost() > self.waitCost():
-				if position != 0:
-					self.nextAction = "Pass"
+	def decidePass(self, position):
+		if self.passCost() > 0:
+			if position != 0:
+				self.nextAction = "Pass"
 		return self.nextAction
+
+	def decideProtest(self, beingPassed):
+		if beingPassed:
+			if self.protestCost)() > self.waitCost():
+				self.nextAction = "Protest"
+
 
 
 class human(NPC):
