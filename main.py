@@ -105,7 +105,6 @@ def stepCounter():
 		print 'The game status is ' , gameStatus
 		for indx, person in enumerate(line):
 			if indx != 0:
-				print person.name
 				if person.nextAction == 'Pass' and line[indx-1].nextAction == 'Protest':
 					if random() < 0.50:
 						print 'Being protested'
@@ -118,6 +117,8 @@ def stepCounter():
 						line[indx], line[indx-1] = line[indx-1], line[indx] #Code to swap the 2 positions
 					else:
 						person.nextAction = 'Pass_Fail'
+						person.newResourceVector = [1, 0.5, person.resourceVector[2]]
+						person.computeEmotion(1)
 				elif person.nextAction == 'Pass' and line[indx-1].nextAction == 'Wait':
 					if random() < 0.95:
 						print 'Not being protested'
@@ -129,6 +130,8 @@ def stepCounter():
 						line[indx], line[indx-1] = line[indx-1], line[indx] #Code to swap the 2 positions
 					else:
 						person.nextAction = 'Pass_Fail'
+						person.newResourceVector = [1, 0.5, person.resourceVector[2]]
+						person.computeEmotion(1)
 
 		displayLine()
 		gameStatus = 'final'
