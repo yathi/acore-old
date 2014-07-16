@@ -271,12 +271,16 @@ class NPC(object):
 		if self.passCost() > 0:
 			if position != 0:
 				self.nextAction = "Pass"
-		return self.nextAction
 
 	def decideProtest(self, beingPassed):
 		if beingPassed:
-			if self.protestCost)() > self.waitCost():
+			if self.protestCost() > self.waitCost():
 				self.nextAction = "Protest"
+
+	def sanityCheck(self, indx, notbeingPassed):
+		if self.nextAction == "Protest" and notbeingPassed:
+			self.decidePass(indx)
+
 
 
 
