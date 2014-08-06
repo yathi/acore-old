@@ -32,7 +32,7 @@ def makeNPC():
     global counter
     name = nameList.pop(randint(0, (len(nameList))-1))
     npc = human(name)
-    npc.resourceVector[2] += counter*0.3
+    npc.resourceVector = [1.0, 1.0, 1.0/(counter+1)]
     counter += 1
     return npc
 
@@ -48,6 +48,7 @@ def displayLine():
 		print "\nName: " , person.name
 		print "Emotion: " , person.getEmotion()
 		print "Desired Action: " , person.nextAction
+		print person.showResource()
 		#print "Protest Cost: " , round(person.protestCost(), 2)
 		#print "Wait Cost: " , round(person.waitCost(), 2)
 		#print "Pass Cost: " , round(person.passCost(), 2)
@@ -75,7 +76,7 @@ def stepCounter():
 
 		for indx, person in enumerate(line):
 			if person.nextAction == 'Pass':
-				person.newResourceVector = [1, 0.5, person.resourceVector[2]+0.3]
+				person.newResourceVector = [1, person.resourceVector[1]-0.4, line[indx-1].resourceVector[2]]
 				person.computeEmotion(0.95)
 
 		displayLine()
@@ -93,7 +94,7 @@ def stepCounter():
 
 		for indx, person in enumerate(line):
 			if person.nextAction == 'Protest':
-				person.newResourceVector = [1, 0.85, person.resourceVector[2]]
+				person.newResourceVector = [1, person.resourceVector[1]-0.10, person.resourceVector[2]]
 				person.resourceVector[2] =- 0.3
 				person.computeEmotion(0.95)
 
@@ -101,7 +102,7 @@ def stepCounter():
 		displayLine()
 		gameStatus = 'penultimate'
 
-	elif gameStatus == 'penultimate':
+	elif gameStatus == 'penultimate':   #This is where the switch actually happens
 		print 'The game status is ' , gameStatus
 		for indx, person in enumerate(line):
 			if indx != 0:
@@ -111,8 +112,9 @@ def stepCounter():
 						person.nextAction = 'Pass_Success'
 						person.computeEmotion(1)
 						line[indx-1].nextAction = 'Wait'
-						line[indx-1].newResourceVector = [line[indx-1].resourceVector[0], line[indx-1].resourceVector[1], line[indx-1].resourceVector[2]-0.3]
+						line[indx-1].newResourceVector = [line[indx-1].resourceVector[0], line[indx-1].resourceVector[1], line[indx].resourceVector[2]]
 						line[indx-1].computeEmotion(1)
+						person.resourceVector = person.newResourceVector
 						line[indx-1].resourceVector = line[indx-1].newResourceVector
 						line[indx], line[indx-1] = line[indx-1], line[indx] #Code to swap the 2 positions
 					else:
@@ -136,7 +138,7 @@ def stepCounter():
 		displayLine()
 		gameStatus = 'final'
 
-	elif gameStatus == 'final':
+	elif gameStatus == 'final':  #This state is to make the person in the front get his items and then reset the other elements. 
 		print '\nThe game status is ' , gameStatus
 		print str(line[0].name) , 'gets the Occulus Rift'
 		line.pop(0)
