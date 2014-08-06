@@ -80,16 +80,11 @@ def stepCounter():
 					person.nextAction = 'Pass'
 					person.computeEmotion(0.95)
 
-		# for indx, person in enumerate(line):
-		# 	if person.nextAction == 'Pass':
-				
-		# 		person.computeEmotion(0.95)
-
 		displayLine()
 		gameStatus = 'protest?'
 
 	elif gameStatus == 'protest?':
-		print 'The game status is ' , gameStatus
+		print 'Game status: ' , gameStatus
 		for indx, person in enumerate(line):
 			if indx < (len(line)-1):
 				person.decideProtest(beingPassed = (line[indx+1].nextAction == "Pass"))
@@ -108,37 +103,37 @@ def stepCounter():
 		gameStatus = 'penultimate'
 
 	elif gameStatus == 'penultimate':   #This is where the switch actually happens
-		print 'The game status is ' , gameStatus
-		for indx, person in enumerate(line):
-			if indx != 0:
-				if person.nextAction == 'Pass' and line[indx-1].nextAction == 'Protest':
-					if random() < 0.50:
-						print 'Being protested'
-						person.nextAction = 'Pass_Success'
-						person.computeEmotion(1)
-						line[indx-1].nextAction = 'Wait'
-						line[indx-1].newResourceVector = [line[indx-1].resourceVector[0], line[indx-1].resourceVector[1], line[indx].resourceVector[2]]
-						line[indx-1].computeEmotion(1)
-						person.resourceVector = person.newResourceVector
-						line[indx-1].resourceVector = line[indx-1].newResourceVector
-						line[indx], line[indx-1] = line[indx-1], line[indx] #Code to swap the 2 positions
-					else:
-						person.nextAction = 'Pass_Fail'
-						person.newResourceVector = [1, 0.5, person.resourceVector[2]]
-						person.computeEmotion(1)
-				elif person.nextAction == 'Pass' and line[indx-1].nextAction == 'Wait':
-					if random() < 0.95:
-						print 'Not being protested'
-						person.nextAction = 'Pass_Success'
-						person.computeEmotion(1)
-						line[indx-1].newResourceVector = [line[indx-1].resourceVector[0], line[indx-1].resourceVector[1], line[indx-1].resourceVector[2]-0.3]
-						line[indx-1].computeEmotion(1)
-						line[indx-1].resourceVector = line[indx-1].newResourceVector
-						line[indx], line[indx-1] = line[indx-1], line[indx] #Code to swap the 2 positions
-					else:
-						person.nextAction = 'Pass_Fail'
-						person.newResourceVector = [1, 0.5, person.resourceVector[2]]
-						person.computeEmotion(1)
+        print 'The game status is ' , gameStatus
+        for indx, person in enumerate(line):
+            if indx != 0:
+                if person.nextAction == 'Pass' and line[indx-1].nextAction == 'Protest':
+                    if random() < 0.50:
+                        print 'Being protested'
+                        person.nextAction = 'Pass_Success'
+                        person.computeEmotion(1)
+                        line[indx-1].nextAction = 'Wait'
+                        line[indx-1].newResourceVector = [line[indx-1].resourceVector[0], line[indx-1].resourceVector[1], line[indx].resourceVector[2]]
+                        line[indx-1].computeEmotion(1)
+                        person.resourceVector = person.newResourceVector
+                        line[indx-1].resourceVector = line[indx-1].newResourceVector
+                        line[indx], line[indx-1] = line[indx-1], line[indx] #Code to swap the 2 positions
+                    else:
+                        person.nextAction = 'Pass_Fail'
+                        person.newResourceVector = [person.resourceVector[0], person.resourceVector[1]-0.4, person.resourceVector[2]]
+                        person.computeEmotion(1)
+                elif person.nextAction == 'Pass' and line[indx-1].nextAction == 'Wait':
+                    if random() < 0.95:
+                        print 'Not being protested'
+                        person.nextAction = 'Pass_Success'
+                        person.computeEmotion(1)
+                        line[indx-1].newResourceVector = [line[indx-1].resourceVector[0], line[indx-1].resourceVector[1], line[indx-1].resourceVector[2]-0.3]
+                        line[indx-1].computeEmotion(1)
+                        line[indx-1].resourceVector = line[indx-1].newResourceVector
+                        line[indx], line[indx-1] = line[indx-1], line[indx] #Code to swap the 2 positions
+                    else:
+                        person.nextAction = 'Pass_Fail'
+                        person.newResourceVector = [person.resourceVector[0], person.resourceVector[1]-0.4, person.resourceVector[2]]
+                        person.computeEmotion(1)
 
 		displayLine()
 		gameStatus = 'final'
