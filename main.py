@@ -48,7 +48,8 @@ def displayLine():
 		print "\nName: " , person.name
 		print "Emotion: " , person.getEmotion()
 		print "Desired Action: " , person.nextAction
-		print person.showResource()
+		print "Resources: " , person.showResource()
+		print "New Resources: " , person.showNR()
 		#print "Protest Cost: " , round(person.protestCost(), 2)
 		#print "Wait Cost: " , round(person.waitCost(), 2)
 		#print "Pass Cost: " , round(person.passCost(), 2)
@@ -70,14 +71,19 @@ def stepCounter():
 		initialized = True
 
 	if gameStatus == 'initial':
-		print 'The game status is ' , gameStatus
+		print 'Game status: ' , gameStatus
 		for indx, person in enumerate(line):
-			person.decidePass(indx)
+			if indx != 0:
+				person.newResourceVector = [person.resourceVector[0]-0.05, person.resourceVector[1]-0.4, line[indx-1].resourceVector[2]]
+				print 'Action cost: ' , str(person.actionCost())
+				if person.actionCost() > 0:
+					person.nextAction = 'Pass'
+					person.computeEmotion(0.95)
 
-		for indx, person in enumerate(line):
-			if person.nextAction == 'Pass':
-				person.newResourceVector = [1, person.resourceVector[1]-0.4, line[indx-1].resourceVector[2]]
-				person.computeEmotion(0.95)
+		# for indx, person in enumerate(line):
+		# 	if person.nextAction == 'Pass':
+				
+		# 		person.computeEmotion(0.95)
 
 		displayLine()
 		gameStatus = 'protest?'
@@ -94,8 +100,7 @@ def stepCounter():
 
 		for indx, person in enumerate(line):
 			if person.nextAction == 'Protest':
-				person.newResourceVector = [1, person.resourceVector[1]-0.10, person.resourceVector[2]]
-				person.resourceVector[2] =- 0.3
+				person.newResourceVector = [person.resourceVector[0], person.resourceVector[1]-0.10, line[indx+1].resourceVector[2]]
 				person.computeEmotion(0.95)
 
 
@@ -142,8 +147,9 @@ def stepCounter():
 		print '\nThe game status is ' , gameStatus
 		print str(line[0].name) , 'gets the Occulus Rift'
 		line.pop(0)
-		for person in line:
+		for indx, person in enumerate(line):
 			person.nextAction = 'Wait'
+			person.resourceVector[2] = 1.0/(indx+1)
 
 		displayLine()
 		gameStatus = 'initial'

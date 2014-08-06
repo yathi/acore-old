@@ -45,7 +45,12 @@ class NPC(object):
 		return self.newResourceVector
 
 	def showResource(self):
+		#To show the resources combined with the name
 		return [':'.join(reso) for reso in zip(self.resourceName, [str(round(resoval, 2)) for resoval in self.resourceVector])]
+
+	def showNR(self):
+		#To show the new resources with the names
+		return [':'.join(reso) for reso in zip(self.resourceName, [str(round(resoval, 2)) for resoval in self.newResourceVector])]		
 
 	def getEmotion(self):
 		return [':'.join(emo) for emo in zip(self.emoName, [str(round(emoval,2)) for emoval in self.emotion])]
@@ -63,8 +68,9 @@ class NPC(object):
 			(0.85 - self.resourceVector[1])*self.resourceWeights[1])
 
 	def actionCost(self):
-		resourceChange = [new - current for current, new in zip(self.resourceVector, self.newResourceVector)]
-		return [change * weights for change, weights in zip(resourceChange, self.resourceWeights)]
+		return ((self.newResourceVector[0]-self.resourceVector[0])*self.resourceWeights[0] +
+			(self.newResourceVector[1] - self.resourceVector[1])*self.resourceWeights[1] +
+			(self.newResourceVector[2]- self.resourceVector[2])*self.resourceWeights[2])
 
 	def decidePass(self, position):
 		if self.passCost() > 0:
